@@ -7,6 +7,13 @@ use App\Post;
 
 class PostsController extends Controller
 {
+
+    public function __construct()
+    {
+
+        $this->middleware('auth')->except(['index','show']);
+    }
+
     public function index(){
         $posts = Post::latest()->get();
         return view('posts.index',compact('posts'));
@@ -20,19 +27,20 @@ class PostsController extends Controller
     }
     public function store(){
 
-        $this->validate(\request(),[
+        $this->validate(request(),[
             'title'=>'required',
-            'body'=>'required'
+            'body'=>'required',
+
         ]);
-       // dd(Post::created(request(['title','body'])));
-//        $post = new Post;
-//
-//        $post->title = request('title');
-//        $post->body  = request('body');
-       Post::create(request(['title','body']));
 
-//         $post->save();
+        auth()->user()->publish(
+            new Post(request(['title','body']))
+        );
 
+//       Post::create([
+//           'title'=>request('title'),
+//           'body'=>request('body'),
+//           'user_id'=>auth()->id()]);
        return redirect('/');
     }
 

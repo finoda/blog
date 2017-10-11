@@ -17,3 +17,11 @@ Route::get('/','PostsController@index');
 Route::get('/post/create','PostsController@create');
 Route::post('/posts','PostsController@store');
 Route::get('/posts/{post}','PostsController@show');
+
+Route::post('/posts/{post}/comments','CommentsController@store');
+
+Route::get('/register','RegistraionController@create');
+Route::post('/register','RegistraionController@store');
+
+
+Route::get('/login','SessionsController@create');
